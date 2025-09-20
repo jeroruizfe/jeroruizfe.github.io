@@ -3,7 +3,7 @@ layout: default
 title: Home
 ---
 
-# Hi, I'm Jeronimo 👋
+# Hi, I'm Jeronimo
 Junior at WPI double-majoring in **Robotics Engineering** and **Computer Science**. I build autonomous systems and tools that blend **perception, planning, and control**.
 
 - **Placing pipeline** (ELPIS Lab): segmentation → scene modeling → feasible (x, y) placements
@@ -13,6 +13,6 @@ Junior at WPI double-majoring in **Robotics Engineering** and **Computer Science
 **Quick links:**  
 - [Projects](/projects)  
 - [Resume (PDF)](/resume)  
-- [GitHub](https://github.com/jeroruizfe) • [LinkedIn](www.linkedin.com/in/jeronimo-ruiz-fernandez)  
+- [GitHub](https://github.com/jeroruizfe)  
 
 *Email:* jruiz1@wpi.edu
