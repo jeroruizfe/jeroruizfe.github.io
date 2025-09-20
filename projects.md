@@ -10,7 +10,9 @@ title: Projects
 **Problem.** Robots need reliable, collision-free placement strategies for manipulation tasks.  
 **Solution.** Designed a placement pipeline using Intel RealSense depth data + OpenCV segmentation. Implemented RANSAC-based plane fitting, background subtraction, depth masking, and non-maximal suppression to find stable placement locations.  
 **Result.** Delivered a validated prototype tested on real cameras, forming the basis for future lab experiments with safe, scalable placement planning.
-**Repo:** [GitHub Link](https://github.com/jeroruizfe/Placement_Locations_Pipeline)
+
+**Repo:** [GitHub Link](https://github.com/jeroruizfe/Placement_Locations_Pipeline).
+**Program Outputs:** [Program Outputs and Presentation Link](https://drive.google.com/drive/folders/1aFdzE-Cx_up_Ry9M9-THeSc41uzn5KT_?usp=sharing).
 
 ---
 
@@ -19,7 +21,9 @@ title: Projects
 **Problem.** Simulate real-world waste collection using small autonomous robots.  
 **Solution.** Programmed Romi robots to retrieve 3D-printed trash bins from a grid using line-following at intersections and AprilTag detection. Integrated encoder feedback, reflectance arrays, and IMU sensing for robust navigation and handling.  
 **Result.** Robots successfully collected and delivered bins in real-world tests, demonstrating reliable coordination of navigation, perception, and object handling.
-**Repo:*** [GitHub Link](https://github.com/jeroruizfe/RBE3000)
+
+**Repo:** [GitHub Link](https://github.com/jeroruizfe/RBE3000)
+**Images and Videos:** [Images and Videos Link](https://drive.google.com/drive/folders/1aFdzE-Cx_up_Ry9M9-THeSc41uzn5KT_?usp=sharing).
 
 ---
 
@@ -36,7 +40,9 @@ title: Projects
 **Stack:** Python, Embedded Control, Team Design  
 **Problem.** Automate harvesting tasks by navigating an environment and sorting fruit-like objects.  
 **Solution.** Collaborated on robot design and programming. Implemented linear navigation, tree alignment, approach logic, fruit recognition, and delivery to correct baskets.  
-**Result.** Built and tested an autonomous system capable of navigating obstacles, recognizing targets, and performing task-specific object sorting.  
+**Result.** Built and tested an autonomous system capable of navigating obstacles, recognizing targets, and performing task-specific object sorting.
+
+**Images and Videos:** [Images and videos link](https://drive.google.com/drive/folders/1KPRDKVIPFE-sA9-1JCUUQLOuMFVhKRKM?usp=sharing)
 
 ---
 
