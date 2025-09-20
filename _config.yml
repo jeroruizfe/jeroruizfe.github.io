@@ -1,5 +1,5 @@
 title: "Jeronimo Ruiz — Robotics & CS"
-description: "WPI Robotics + CS | UR10 placement pipeline, Romi robots, wind tunnel project"
+description: "WPI Robotics + CS | Placement pipeline, Romi robots, and Fruit picking robot."
 remote_theme: pages-themes/cayman@v0.2.0
 plugins:
   - jekyll-remote-theme
