@@ -3,7 +3,7 @@ layout: default
 title: Home
 ---
 
-# Hi, I'm Jeronimo
+# Hi, I'm Jeronimo Ruiz Fernandez
 Junior at WPI double-majoring in **Robotics Engineering** and **Computer Science**. I build autonomous systems and tools that blend **perception, planning, and control**.
 
 - **Placing pipeline** (ELPIS Lab): segmentation → scene modeling → feasible (x, y) placements
