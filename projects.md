@@ -11,7 +11,7 @@ title: Projects
 **Solution.** Designed a placement pipeline using Intel RealSense depth data + OpenCV segmentation. Implemented RANSAC-based plane fitting, background subtraction, depth masking, and non-maximal suppression to find stable placement locations.  
 **Result.** Delivered a validated prototype tested on real cameras, forming the basis for future lab experiments with safe, scalable placement planning.
 
-**Repo:** [GitHub Link](https://github.com/jeroruizfe/Placement_Locations_Pipeline).
+**Repo:** [GitHub Link](https://github.com/elpis-lab/block-rearrangement).
 **Program Outputs:** [Program Outputs and Presentation Link](https://drive.google.com/drive/folders/1aFdzE-Cx_up_Ry9M9-THeSc41uzn5KT_?usp=sharing).
 
 ---
