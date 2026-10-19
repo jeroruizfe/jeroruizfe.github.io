@@ -5,14 +5,13 @@ title: Projects
 
 # Projects
 
-## Placing Pipeline (ELPIS Lab)
-**Stack:** Python, OpenCV, RealSense, RANSAC  
-**Problem.** Robots need reliable, collision-free placement strategies for manipulation tasks.  
-**Solution.** Designed a placement pipeline using Intel RealSense depth data + OpenCV segmentation. Implemented RANSAC-based plane fitting, background subtraction, depth masking, and non-maximal suppression to find stable placement locations.  
-**Result.** Delivered a validated prototype tested on real cameras, forming the basis for future lab experiments with safe, scalable placement planning.
+## Object-Agnostic Placing Pipeline (ELPIS Lab)
+**Stack:** Python, ROS 2, OpenCV, HDBSCAN, SciPy, Intel RealSense D435, SMACH, MoveIt, UR10  
+**Problem.** In block-rearrangement tasks the robot needs collision-free placement poses for a grasped object at runtime, on a cluttered table or on top of other objects, without a prior model of the object or the scene.  
+**Solution.** Designed and implemented a placement pipeline on RealSense depth data. HDBSCAN clustering in (x, y, depth) space separates the support surface from elevated obstacles; valid placement centers are computed by convolving the obstacle map with the grasped object’s observed mask in two orientations, then cleaned with morphological filtering. A stacking mode validates candidate clusters by fit and orientation (minimum-area rectangle) for placing on top of other objects. Exposed the pipeline as a ROS 2 service (GetPlacement) and integrated it into the SMACH pick-and-place state machine, with 2D-to-3D projection through the lab’s calibrated world-coordinates service and motion executed via the UR ROS 2 driver and MoveIt.  
+**Result.** Replaced hard-coded drop locations with runtime placement selection in the lab’s UR10 pick-and-place system, enabling table and stacking placements for arbitrary object shapes as part of the Manipulation-Net benchmarking work.
 
 **Repo:** [GitHub Link](https://github.com/elpis-lab/block-rearrangement).
-**Program Outputs:** [Program Outputs and Presentation Link](https://drive.google.com/drive/folders/1aFdzE-Cx_up_Ry9M9-THeSc41uzn5KT_?usp=sharing).
 
 ---
 
