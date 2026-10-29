@@ -63,7 +63,7 @@ title: Projects
 **Solution.** Programmed Romi robots to retrieve 3D-printed trash bins from a grid using line-following at intersections and AprilTag detection. Integrated encoder feedback, reflectance arrays, and IMU sensing for robust navigation and handling.  
 **Result.** Robots collected and delivered bins in real-world tests, coordinating navigation, perception, and object handling.
 
-**Repo:** [jeroruizfe/RBE3000](https://github.com/jeroruizfe/RBE3000) · **Images and videos:** [Drive folder](https://drive.google.com/drive/folders/1aFdzE-Cx_up_Ry9M9-THeSc41uzn5KT_?usp=sharing)
+**Images and videos:** [Drive folder](https://drive.google.com/drive/folders/1aFdzE-Cx_up_Ry9M9-THeSc41uzn5KT_?usp=sharing)
 
 ---
 
