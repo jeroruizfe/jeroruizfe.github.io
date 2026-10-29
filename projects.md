@@ -3,7 +3,6 @@ layout: default
 title: Projects
 ---
 
-[Home](/) · **Projects** · [Resume](/resume) · [GitHub](https://github.com/jeroruizfe)
 
 # Projects
 
@@ -60,7 +59,7 @@ title: Projects
 
 ---
 
-## Approximate Q-Learning Bomberman Agent — RBE 4701 (AI for Robotics)
+## Approximate Q-Learning Bomberman Agent — RBE 4701 (AI for Robotics) {#bomberman}
 **Role:** Team 12 (3 students), A-Term 2026 · **Stack:** Python standard library only, Expectimax, A\*, approximate Q-learning
 
 <img src="/assets/bomberman_variant5.gif" alt="The agent escaping variant 5 (aggressive + random monsters)" style="max-width:220px;width:100%;border-radius:6px;">

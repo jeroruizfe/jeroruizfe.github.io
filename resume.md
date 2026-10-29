@@ -3,7 +3,6 @@ layout: default
 title: Resume
 ---
 
-[Home](/) · [Projects](/projects) · **Resume** · [GitHub](https://github.com/jeroruizfe)
 
 # Resume
 

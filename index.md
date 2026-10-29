@@ -3,12 +3,22 @@ layout: default
 title: Home
 ---
 
-**Home** · [Projects](/projects) · [Resume](/resume) · [GitHub](https://github.com/jeroruizfe)
 
-# Hi, I'm Jeronimo Ruiz Fernandez
-Senior at WPI double-majoring in **Robotics Engineering** and **Computer Science** (B.S. ×2, May 2027). I build robot autonomy stacks — **perception, planning, and control** on real hardware — and the software tooling around them, from ROS 2 services to LLM agent pipelines.
+<div class="hero" markdown="1">
+<div class="hero-text" markdown="1">
+
+# Robot autonomy on real hardware
+
+Senior at WPI, double-majoring in **Robotics Engineering** and **Computer Science** (two B.S. degrees, May 2027). I build robot autonomy stacks — **perception, planning, and control** on physical robots — and the software tooling around them, from ROS 2 services to LLM agent pipelines.
 
 **Currently:** Research Assistant at WPI's [ELPIS Lab](https://github.com/elpis-lab) (UR10 manipulation) and completing a Saint-Gobain–sponsored MQP automating Mayer-rod coating on a UR10.
+
+</div>
+<figure class="hero-media">
+<a href="/projects#bomberman"><img src="/assets/bomberman_variant5.gif" alt="Approximate Q-learning agent escaping a Bomberman level with two monsters"></a>
+<figcaption>Q-learning agent bombing through walls past an aggressive monster — 94–100% win rate across five variants. <a href="/projects#bomberman">Project →</a></figcaption>
+</figure>
+</div>
 
 ## Highlights
 - **Runtime placement selection for a UR10** (ELPIS Lab): RealSense depth → HDBSCAN scene clustering → collision-free (x, y, z) placements, served over ROS 2 and used in the lab's ManipulationNet pick-and-place system.
