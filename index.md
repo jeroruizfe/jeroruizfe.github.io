@@ -4,12 +4,12 @@ title: Home
 ---
 
 # Hi, I'm Jeronimo Ruiz Fernandez
-Senior at WPI double-majoring in **Robotics Engineering** and **Computer Science** (B.S. ×2, May 2027). I build robot autonomy stacks — **perception, planning, and control** on real hardware — and the software tooling around them, from ROS 2 services to LLM agent pipelines.
+Senior at WPI double-majoring in **Robotics Engineering** and **Computer Science** (B.S. ×2, May 2027). I build robot autonomy stacks, **perception, planning, and control** on real hardware, and the software tooling around them, from ROS 2 services to LLM agent pipelines.
 
 **Currently:** Research Assistant at WPI's [ELPIS Lab](https://github.com/elpis-lab) (UR10 manipulation) and completing a Saint-Gobain–sponsored MQP automating Mayer-rod coating on a UR10.
 
 ## Highlights
-- **Runtime placement selection for a UR10** (ELPIS Lab): RealSense depth → HDBSCAN scene clustering → collision-free (x, y, z) placements, served over ROS 2 and used in the lab's ManipulationNet pick-and-place system.
+- **Runtime placement selection for a UR10** (ELPIS Lab): RealSense depth -> HDBSCAN scene clustering -> collision-free (x, y, z) placements, served over ROS 2 and used in the lab's ManipulationNet pick-and-place system.
 - **Autonomous frontier exploration on a TurtleBot3** (ROS 2 Jazzy): frontier selection, risk-aware A*, pure-pursuit tracking, and AMCL relocalization — our own planner and controller, no Nav2 stack — on physical hardware.
 - **Approximate Q-learning Bomberman agent** (AI for Robotics): 94–100% win rate across five monster variants on 200 held-out seeds, with an exact one-tick simulator and a learned linear Q-function.
 - **Agentic LLM assistant for enterprise logistics** (Argano / Netlogistik): migrated a single-shot chatbot to a multi-step tool-use agent with RAG on Azure AI Search and an LLM-as-a-Judge eval pipeline.
