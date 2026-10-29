@@ -24,7 +24,7 @@ title: Projects
 - Motion executed via the UR ROS 2 driver and MoveIt; the SMACH sequencer handles detect → pick → place with failure recovery.
 </details>
 
-**Repo:** [elpis-lab/block-rearrangement](https://github.com/elpis-lab/block-rearrangement)
+**Repo:** [github.com/elpis-lab](https://github.com/elpis-lab)
 
 ---
 
