@@ -3,88 +3,127 @@ layout: default
 title: Projects
 ---
 
+[Home](/) · **Projects** · [Resume](/resume) · [GitHub](https://github.com/jeroruizfe)
+
 # Projects
 
 ## Object-Agnostic Placing Pipeline — ELPIS Lab, WPI
-**Role:** Research Assistant (Sep 2024–present)  
-**Stack:** Python, ROS 2, OpenCV, HDBSCAN, SciPy, Intel RealSense D435, SMACH, MoveIt, UR10  
-**Problem.** In block-rearrangement tasks the robot needs collision-free placement poses for a grasped object at runtime — on a cluttered table or on top of other objects — without a prior model of the object or the scene.  
-**Solution.** Designed and implemented a placement pipeline on RealSense depth data. HDBSCAN clustering in (x, y, depth) space separates the support surface from elevated obstacles; valid placement centers are computed by convolving the obstacle map with the grasped object's observed mask in two orientations, then cleaned with morphological filtering. A stacking mode validates candidate clusters by fit and orientation (minimum-area rectangle) for placing on top of other objects. Exposed the pipeline as a ROS 2 service (`GetPlacement`) and integrated it into the SMACH pick-and-place state machine, with 2D→3D projection through the lab's calibrated world-coordinates service and motion executed via the UR ROS 2 driver and MoveIt.  
-**Result.** Replaced hard-coded drop locations with runtime placement selection in the lab's UR10 pick-and-place system, enabling table and stacking placements for arbitrary object shapes as part of the ManipulationNet "Text to Placement" benchmarking work. The system now sits alongside a PDDL task planner and predicate-grounding layer, so a goal like `(on green_cube_0 orange_cube_1)` is planned, grounded from the camera, and executed end to end.
+**Role:** Research Assistant (Sep 2024–present) · **Stack:** Python, ROS 2, OpenCV, HDBSCAN, SciPy, RealSense D435, SMACH, MoveIt, UR10
+
+<img src="/assets/ur10_stacking_scene.jpg" alt="Cubes stacked by the UR10 using runtime placement selection" style="max-width:560px;width:100%;border-radius:6px;">
+<p style="font-size:0.85em;color:#666;margin-top:4px;">A rearrangement goal executed by the lab's UR10 — each stacked cube was placed at a location chosen at runtime by the pipeline.</p>
+
+**Problem.** In block-rearrangement tasks the robot needs a collision-free placement pose for whatever it is holding — on a cluttered table or on top of another object — with no prior model of the object or the scene.  
+**Solution.** From a RealSense depth frame, HDBSCAN clustering in (x, y, depth) separates the support surface from elevated obstacles; convolving the obstacle map with the grasped object's observed mask yields valid placement centers. A stacking mode validates candidate surfaces by fit and orientation. Exposed as a ROS 2 service (`GetPlacement`) and wired into the SMACH pick-and-place state machine.  
+**Result.** Replaced hard-coded drop locations with runtime placement selection in the lab's ManipulationNet "Text to Placement" system; now sits under a PDDL task planner so a goal like `(on green_cube_0 orange_cube_1)` is planned, grounded from the camera, and executed end to end.
+
+<details markdown="1"><summary>Details</summary>
+
+- Depth normalization and 2D→3D projection through the lab's calibrated world-coordinates service.
+- Obstacle-mask convolution is run in two orientations of the object mask, then cleaned with morphological filtering.
+- Stacking mode fits a minimum-area rectangle to each elevated cluster and rejects clusters the object would overhang.
+- Motion executed via the UR ROS 2 driver and MoveIt; the SMACH sequencer handles detect → pick → place with failure recovery.
+</details>
 
 **Repo:** [elpis-lab/block-rearrangement](https://github.com/elpis-lab/block-rearrangement)
 
 ---
 
 ## Autonomous Frontier Exploration on TurtleBot3 — RBE 3002
-**Role:** Team of 3, D-Term 2026 (Mar–May)  
-**Stack:** ROS 2 Jazzy, Python, NumPy, SciPy, slam_toolbox, AMCL, Nav2 map server, Gazebo, RViz, TurtleBot3  
-**Problem.** Make a physical TurtleBot3 explore and map an unknown arena on its own, save the map, then relocalize from scratch and navigate to arbitrary goals in it.  
-**Solution.** Built the full autonomy stack as four ROS 2 packages (`exploration`, `planning`, `control`, `simulation`) with no Nav2 planner or controller — only its map server and lifecycle manager.
-- **Exploration:** a frontier node detects free cells bordering unknown space in the slam_toolbox map, scores candidates by planner distance, surrounding unknown area, and heading change, and keeps a world-space blacklist of visited and failed frontiers so the robot commits to one target instead of oscillating. A client node closes the loop: request frontier → request plan → drive → repeat until the map is closed, then saves it.
-- **Planning:** A* over an obstacle-inflated grid with a BFS **risk map** (distance-from-obstacle) folded into edge cost so paths stay centered in corridors; orientation-aware neighbors, isolated-noise removal, waypoint optimization, and a `validate_trajectory` service the controller calls before committing to a segment.
-- **Control:** **pure pursuit** path tracking (0.45 m lookahead, curvature `k = 2·y/ld²`) with a PD `go_to` fallback and smooth drive profiles; odometry via tf2.
-- **Localization phase:** on a saved map, a navigator node triggers AMCL global localization, spins the robot while monitoring pose covariance until it converges, then hands off to a goal sender that routes RViz goals through the same planner and controller.
+**Role:** Team of 3, D-Term 2026 · **Stack:** ROS 2 Jazzy, Python, NumPy, SciPy, slam_toolbox, AMCL, Gazebo, RViz, TurtleBot3
 
-**Result.** The robot autonomously mapped the course on real hardware, relocalized from an unknown start, and drove to clicked goals using our own planner and controller end to end.
+<img src="/assets/turtlebot3_risk_astar.png" alt="Risk-weighted A* vs plain A* on a course map" style="max-width:560px;width:100%;border-radius:6px;">
+<p style="font-size:0.85em;color:#666;margin-top:4px;">Our planner's risk-weighted A* (green) vs. plain shortest-path A* (red) on a course map, using the planner's actual edge-cost function. The risk term pushes paths away from walls.</p>
+
+**Problem.** Make a physical TurtleBot3 explore and map an unknown arena on its own, save the map, then relocalize from scratch and drive to arbitrary goals in it.  
+**Solution.** Our own exploration, planning, and control stack in four ROS 2 packages — no Nav2 planner or controller. A frontier node picks the next target by planner distance, surrounding unknown area, and heading change; A\* runs over an inflated grid with a BFS distance-from-obstacle risk map in the edge cost; a pure-pursuit controller tracks the path. On a saved map, AMCL global localization with a covariance-monitored spin hands off to goal-driven navigation.  
+**Result.** The robot autonomously mapped the course on real hardware, relocalized from an unknown start, and drove to clicked goals end to end.
+
+<details markdown="1"><summary>Details</summary>
+
+- **Exploration:** free cells bordering unknown space are scored and the winner is published as a goal; a world-space blacklist of visited and failed frontiers stops the robot oscillating between targets. A client node loops request-frontier → plan → drive until the map is closed, then saves it with the Nav2 map server.
+- **Planning:** `GetPlan` service; obstacle inflation by the robot footprint, isolated-noise removal, orientation-aware 8-neighbors, waypoint optimization, and a `validate_trajectory` service the controller calls before committing to a segment. Edge cost = Euclidean + `16.5·exp(−0.15·risk)`.
+- **Control:** pure pursuit with a 0.45 m lookahead and curvature `k = 2·y / ld²`, a PD `go_to` fallback, smooth drive profiles, odometry via tf2.
+- **Localization:** a navigator node triggers AMCL global localization and spins the robot while monitoring pose covariance until it converges; a goal sender routes RViz goals through the same planner and controller.
+</details>
+
+**Repo:** [jeroruizfe/RBE-3002-D26-Team1](https://github.com/jeroruizfe/RBE-3002-D26-Team1)
 
 ---
 
 ## Automated Mayer-Rod Coating System — MQP, sponsored by Saint-Gobain
-**Role:** Solo Major Qualifying Project, advisor Prof. Constantinos Chamzas (2026–27)  
-**Stack:** UR10, UR RTDE, MuJoCo, Python, inverse kinematics  
-**Problem.** Mayer-rod draw-down coating is a manual, operator-dependent lab process; Saint-Gobain wants it automated with repeatable strokes, tool management, and verification that the rod is clean between runs.  
-**Solution.** Developing a UR10 cell that executes the coating stroke routine through UR's RTDE interface. Built a MuJoCo digital twin of the workcell for IK-based stroke-trajectory generation and validation before running on the physical arm; designing the tool-handling and cleaning-verification steps around it.  
+**Role:** Solo Major Qualifying Project, advisor Prof. Constantinos Chamzas (2026–27) · **Stack:** UR10, UR RTDE, MuJoCo, Python, inverse kinematics
+
+**Problem.** Mayer-rod draw-down coating is a manual, operator-dependent lab process; Saint-Gobain wants repeatable strokes, tool management, and verification that the rod is clean between runs.  
+**Solution.** A UR10 cell that executes the coating stroke routine through UR's RTDE interface. A MuJoCo digital twin of the workcell generates and validates IK-based stroke trajectories before anything runs on the physical arm; tool-handling and cleaning-verification steps are being designed around it.  
 **Status.** In progress — stroke execution is moving from the digital twin to the real UR10.
 
 ---
 
 ## Approximate Q-Learning Bomberman Agent — RBE 4701 (AI for Robotics)
-**Role:** Team 12 (3 students), A-Term 2026  
-**Stack:** Python (standard library only — no NumPy/PyTorch), Expectimax, A*, approximate Q-learning  
-**Problem.** Escape a Bomberman grid from the top-left corner to the exit by bombing through walls, across five variants ranging from a deterministic empty world to an aggressive monster plus a random monster.  
-**Solution.** Each tick the agent enumerates 18 actions (9 moves × bomb/no-bomb), simulates each one for exactly one tick with a lightweight copy of the game rules (monsters commit to their move before the character, so their next step is known), and scores it with a linear Q-function `Q(s,a) = w_mode · f(s,a)`. A three-state machine (ADVANCE / BOMB_WAIT / DANGER) selects the active weight vector. Features include a bomb-aware planner distance to the exit, the distance a bomb would save, a five-tick survival probability from Expectimax over the true monster rules, and blast-zone / monster-proximity terms. A safety shield prunes actions the simulator proves fatal. Weights are learned offline with the standard approximate Q-learning update and evaluated headlessly with multiprocessing.  
-**Result.** On 200 held-out seeds per variant: **100% / 99.0% / 99.5% / 95.0% / 94.0%** win rates for variants 1–5. Training from scratch takes ~11 minutes on 2 cores.
+**Role:** Team 12 (3 students), A-Term 2026 · **Stack:** Python standard library only, Expectimax, A\*, approximate Q-learning
+
+<img src="/assets/bomberman_variant5.gif" alt="The agent escaping variant 5 (aggressive + random monsters)" style="max-width:220px;width:100%;border-radius:6px;">
+<p style="font-size:0.85em;color:#666;margin-top:4px;">Variant 5 — two monsters, one aggressive. The agent bombs through walls and reaches the exit.</p>
+
+**Problem.** Escape a Bomberman grid by bombing through walls, across five variants from a deterministic empty world to an aggressive monster plus a random one.  
+**Solution.** Each tick the agent enumerates 18 actions (9 moves × bomb/no-bomb), simulates each for exactly one tick with a lightweight copy of the game rules, and scores it with a linear Q-function whose weight vector is chosen by a three-state machine (ADVANCE / BOMB_WAIT / DANGER). A safety shield prunes actions the simulator proves fatal. Weights are learned offline with the approximate Q-learning update.  
+**Result.** On 200 held-out seeds per variant: **100% / 99.0% / 99.5% / 95.0% / 94.0%** win rates for variants 1–5.
+
+<details markdown="1"><summary>Details</summary>
+
+- Monsters commit to their move before the character, so the one-tick simulation of each action is exact.
+- Features: bomb-aware planner distance to the exit (walls cost one bomb cycle), distance a bomb would save, a five-tick survival probability from Expectimax over the true monster rules, blast-zone and monster-proximity terms.
+- `train.py` learns all five variants in ~11 minutes on 2 cores; `evaluate.py` plays hundreds of seeded games headlessly with multiprocessing.
+- No NumPy or PyTorch — the whole agent is `json`, `heapq`, `random`, `collections`, `multiprocessing`.
+</details>
+
+**Repo:** [jeroruizfe/RBE470x-projects](https://github.com/jeroruizfe/RBE470x-projects) · **Report:** [PDF](https://github.com/jeroruizfe/RBE470x-projects/blob/main/Team12/report.pdf)
 
 ---
 
 ## Agentic LLM Data Assistant — Argano / Netlogistik
-**Role:** Software Engineering Intern (May–Aug 2026, remote)  
-**Stack:** MCP, Node.js, SQL, Snowflake, Azure AI Search, Azure AI Foundry  
-**Problem.** A single-shot, JSON-parsing chatbot was the SaaS team's natural-language interface to enterprise logistics data for five clients (~$1.2M ACV), and it broke on multi-step questions.  
-**Solution.** Migrated the chatbot to an agentic, multi-step tool-use framework built on MCP, connecting natural-language queries to MongoDB, Snowflake, and Power BI. Built a RAG pipeline on Azure AI Search over a ~547-chunk logistics corpus and wired retrieval in as a tool in the function-calling loop. Built an LLM-as-a-Judge evaluation pipeline driven by client feedback signals to measure regressions across releases.  
-**Result.** Strengthened the production SaaS offering with a measurable eval loop instead of ad-hoc testing.
+**Role:** Software Engineering Intern (May–Aug 2026, remote) · **Stack:** MCP, Node.js, SQL, Snowflake, Azure AI Search, Azure AI Foundry
+
+**Problem.** A single-shot, JSON-parsing chatbot was the SaaS team's natural-language interface to logistics data for five enterprise clients (~$1.2M ACV), and it broke on multi-step questions.  
+**Solution.** Migrated it to an agentic, multi-step tool-use framework on MCP connecting natural-language queries to MongoDB, Snowflake, and Power BI. Built a RAG pipeline on Azure AI Search over a ~547-chunk logistics corpus, exposed as a tool in the function-calling loop, and an LLM-as-a-Judge evaluation pipeline driven by client feedback signals.  
+**Result.** A production assistant with a measurable eval loop instead of ad-hoc testing.
 
 ---
 
 ## Romi Trash-Collection Robots — RBE 3000
-**Stack:** C/C++, Embedded Systems, AprilTags, Sensors  
-**Problem.** Simulate real-world waste collection using small autonomous robots.  
-**Solution.** Programmed Romi robots to retrieve 3D-printed trash bins from a grid using line-following at intersections and AprilTag detection. Integrated encoder feedback, reflectance arrays, and IMU sensing for robust navigation and handling.  
-**Result.** Robots collected and delivered bins in real-world tests, coordinating navigation, perception, and object handling.
+**Stack:** C/C++, embedded systems, AprilTags, encoders, reflectance array, IMU
 
-**Images and videos:** [Drive folder](https://drive.google.com/drive/folders/1aFdzE-Cx_up_Ry9M9-THeSc41uzn5KT_?usp=sharing)
+**Problem.** Simulate waste collection with small autonomous robots on a grid.  
+**Solution.** Romi robots retrieve 3D-printed bins using line following at intersections and AprilTag detection, fusing encoder, reflectance, and IMU feedback.  
+**Result.** Robots collected and delivered bins in real-world tests.
+
+**Repo:** [jeroruizfe/RBE3000](https://github.com/jeroruizfe/RBE3000) · **Images and videos:** [Drive folder](https://drive.google.com/drive/folders/1aFdzE-Cx_up_Ry9M9-THeSc41uzn5KT_?usp=sharing)
 
 ---
 
-## UR10 Robotic Arm — Camera Mount & Calibration
-**Stack:** SolidWorks, hand–eye calibration, RealSense, UR10  
-**Problem.** Accurate perception was required for reliable UR10 pick-and-place experiments.  
-**Solution.** Designed and fabricated a dual-angle camera mount in SolidWorks. Performed hand–eye calibration using fiducial tags to align robot and camera frames.  
-**Result.** Calibrated UR10 + RealSense setup with improved object localization, enabling higher-accuracy manipulation tasks.
+## UR10 Camera Mount & Hand–Eye Calibration
+**Stack:** SolidWorks, hand–eye calibration, fiducial tags, RealSense, UR10
+
+**Problem.** Reliable pick-and-place needed an accurate camera-to-robot transform.  
+**Solution.** Designed and fabricated a dual-angle camera mount in SolidWorks; performed hand–eye calibration with fiducial tags to align robot and camera frames.  
+**Result.** Calibrated UR10 + RealSense setup with improved object localization.
+
+**Repo:** [jeroruizfe/Calibration](https://github.com/jeroruizfe/Calibration)
 
 ---
 
 ## Fruit-Picking Autonomous Mobile Robot
-**Stack:** Python, embedded control, team design  
-**Problem.** Automate harvesting tasks by navigating an environment and sorting fruit-like objects.  
-**Solution.** Collaborated on robot design and programming. Implemented linear navigation, tree alignment, approach logic, fruit recognition, and delivery to the correct baskets.  
-**Result.** Autonomous system capable of navigating obstacles, recognizing targets, and performing task-specific object sorting.
+**Stack:** Python, embedded control, team design
+
+**Problem.** Navigate an environment and sort fruit-like objects into the right baskets.  
+**Solution.** Linear navigation, tree alignment, approach logic, fruit recognition, and delivery.  
+**Result.** Autonomous navigation around obstacles with task-specific object sorting.
 
 **Images and videos:** [Drive folder](https://drive.google.com/drive/folders/1KPRDKVIPFE-sA9-1JCUUQLOuMFVhKRKM?usp=sharing)
 
 ---
 
 ### Other Work
-- **Controls Mini-Labs:** Step response tuning, PID controllers, and Routh–Hurwitz stability analysis.
-- **IK Exercises:** DH modeling + validation for SCARA and 3-DOF manipulators.
+- **Controls Mini-Labs:** step-response tuning, PID controllers, Routh–Hurwitz stability analysis.
+- **IK Exercises:** DH modeling and validation for SCARA and 3-DOF manipulators.

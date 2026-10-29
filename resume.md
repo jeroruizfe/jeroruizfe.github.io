@@ -3,6 +3,8 @@ layout: default
 title: Resume
 ---
 
+[Home](/) · [Projects](/projects) · **Resume** · [GitHub](https://github.com/jeroruizfe)
+
 # Resume
 
 - Resume: <a href="/Jeronimo_Ruiz_Fernandez_Resume.pdf" target="_blank" rel="noopener">Download PDF</a>
@@ -15,4 +17,4 @@ title: Resume
 - **Argano / Netlogistik** — Software Engineering Intern (May–Aug 2026): agentic LLM tool-use framework, RAG on Azure AI Search, LLM-as-a-Judge evals.
 - **ELPIS Lab, WPI** — Research Assistant (Sep 2024–present): runtime placement pipeline for UR10 + RealSense (ROS 2, HDBSCAN).
 - **Horizon Surgical Systems** — Apprentice (Oct 2025): reliability and trajectory-regression testing on the Polaris™ surgical robot.
-- **Skills:** Python, C++, C, MATLAB, Java · ROS 2, RViz, Gazebo, MuJoCo · RealSense depth sensing · SolidWorks, FEA · Arduino / microcontrollers
+- **Skills:** Python, C++, C, MATLAB, Java, TypeScript · ROS 2, RViz, MoveIt, MuJoCo, Gazebo, Linux · PyTorch, OpenCV, RealSense depth sensing · MCP, RAG (Azure AI Search), LLM evals · SolidWorks · microcontrollers
